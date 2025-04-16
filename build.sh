@@ -16,10 +16,10 @@ case $build_type in
   original)
     smali_folder="original/smali"
     ;;
-  "android (non root)")
+  "android")
     smali_folder="android/smali"
     ;;
-  "switch port")
+  "switch")
     smali_folder="switch/smali"
     ;;
   *)
