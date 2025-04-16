@@ -43,22 +43,17 @@ jobs:
         sudo install bin/jadx /usr/local/bin/jadx
         sudo chmod +x /usr/local/bin/jadx
 
-    - name: Print selected build type
-      run: |
-        echo "Selected build type: ${{ github.event.inputs.build_type }}"
+    - name: Run build.sh with selected build type
+        run: |
+          echo "Running build with type: ${{ github.event.inputs.build_type }}"
+          bash ./build.sh "${{ github.event.inputs.build_type }}"
 
-    - name: Run build script with selected build type
-      run: |
-          BUILD_TYPE="${{ github.event.inputs.build_type }}"
-          echo "Building with selected type: $BUILD_TYPE"
-          bash ./build.sh "$BUILD_TYPE"
-
-    - name: Upload APK to Release
-      uses: softprops/action-gh-release@v1
-      with:
+      - name: Upload APKs
+        uses: softprops/action-gh-release@v1
+        with:
           files: |
-            ${{ github.event.inputs.build_type == 'original' && 'original/apk/*.apk' || '' }}
-            ${{ github.event.inputs.build_type == 'android (non root)' && 'android*/apk/*.apk' || '' }}
-            ${{ github.event.inputs.build_type == 'switch port' && 'switch*/apk/*.apk' || '' }}
-      env:
+            original/apk/*.apk
+            android*/apk/*.apk
+            switch*/apk/*.apk
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
