@@ -36,6 +36,12 @@ jobs:
         yes | "$HOME/Android/Sdk/cmdline-tools/latest/bin/sdkmanager" --licenses
         "$HOME/Android/Sdk/cmdline-tools/latest/bin/sdkmanager" "build-tools;33.0.0" "platform-tools" "platforms;android-33"   
  
+    - name: Add aapt to PATH
+      run: echo "$HOME/Android/Sdk/build-tools/33.0.0" >> $GITHUB_PATH
+
+    - name: Ensure aapt executable
+      run: sudo chmod +x $HOME/Android/Sdk/build-tools/33.0.0/aapt
+      
       # Install Jadx
     - name: Install Jadx
       run: |
