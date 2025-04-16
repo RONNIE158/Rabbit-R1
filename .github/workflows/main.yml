@@ -1,75 +1,61 @@
-name: APK Builder & Release
+name: Build APK and Decompile with JADX
 
 on:
+  push:
+    branches:
+      - main  # Atau branch yang kamu inginkan
   workflow_dispatch:
 
 jobs:
-  build-and-release:
+  build_and_decompile:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+    # Check out the repository
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Set up Java
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
+    # Install dependencies
+    - name: Install required dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y openjdk-11-jdk wget unzip
 
-      - name: Install dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y apktool zip wget unzip
+    # Download and extract JADX
+    - name: Download JADX
+      run: |
+        wget https://github.com/skylot/jadx/releases/download/v1.4.7/jadx-1.4.7.zip
+        unzip jadx-1.4.7.zip -d jadx
 
-          # Download dan ekstrak JADX tanpa interaksi
-          wget https://github.com/skylot/jadx/releases/download/v1.4.7/jadx-1.4.7.zip
-          unzip -q -o jadx-1.4.7.zip
+    # Set up the folder structure for JADX
+    - name: Set up JADX folder structure
+      run: |
+        sudo mkdir -p /usr/local/bin
+        sudo mkdir -p /usr/local/lib
+        sudo mv jadx-1.4.7/bin/jadx /usr/local/bin/
+        sudo mv jadx-1.4.7/bin/jadx-gui /usr/local/bin/
+        sudo mv jadx-1.4.7/bin/jadx.run /usr/local/bin/
+        sudo mv jadx-1.4.7/bin/jadx-gui.run /usr/local/bin/
+        sudo mv jadx-1.4.7/lib/* /usr/local/lib/
 
-          # Cek struktur folder setelah ekstraksi untuk memastikan lokasi bin/jadx
-          ls -R jadx-1.4.7
+    # Display Java version
+    - name: Display Java version
+      run: java -version
 
-          # Pindahkan file 'jadx', 'jadx-gui', 'jadx.run', dan 'jadx-gui.run' ke /usr/local/bin/ dan pastikan sudah executable
-          sudo mv jadx-1.4.7/bin/jadx /usr/local/bin/
-          sudo mv jadx-1.4.7/bin/jadx-gui /usr/local/bin/
-          sudo mv jadx-1.4.7/bin/jadx.run /usr/local/bin/
-          sudo mv jadx-1.4.7/bin/jadx-gui.run /usr/local/bin/
+    # Decompile APK with JADX
+    - name: Decompile APK using JADX
+      run: |
+        # Assumes APK is available at a specific location, modify as needed
+        /usr/local/bin/jadx -d decompiled_apk /path/to/your.apk
 
-          # Ubah hak akses agar file-file tersebut bisa dieksekusi
-          sudo chmod +x /usr/local/bin/jadx
-          sudo chmod +x /usr/local/bin/jadx-gui
-          sudo chmod +x /usr/local/bin/jadx.run
-          sudo chmod +x /usr/local/bin/jadx-gui.run
+    # (Optional) Upload decompiled files to artifacts
+    - name: Upload Decompiled APK Files
+      uses: actions/upload-artifact@v3
+      with:
+        name: decompiled-apk
+        path: decompiled_apk/
 
-          # Pindahkan seluruh file .jar dari lib/ ke /usr/local/lib/jadx/
-          sudo mkdir -p /usr/local/lib/jadx
-          sudo mv jadx-1.4.7/lib/* /usr/local/lib/jadx/
-
-          # Setel CLASSPATH untuk seluruh .jar di /usr/local/lib/jadx/
-          export CLASSPATH=/usr/local/lib/jadx/*
-
-          # Menjalankan Jadx untuk memastikan semuanya berjalan
-          jadx -v
-
-      - name: Make build script executable
-        run: chmod +x build.sh
-
-      - name: Run build for all types
-        run: |
-          for i in 1 2 3; do
-            echo $i | ./build.sh
-          done
-
-      - name: Zip all APKs
-        run: |
-          mkdir -p release
-          find . -type f -name "*.apk" -exec zip -j release/Rabbit_R1_Builds.zip {} +
-
-      - name: Create GitHub Release and upload ZIP
-        uses: softprops/action-gh-release@v1
-        with:
-          name: "Rabbit APK Build - ${{ github.run_number }}"
-          tag_name: "build-${{ github.run_number }}"
-          files: release/Rabbit_R1_Builds.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # Cleanup
+    - name: Clean up
+      run: |
+        rm -rf jadx-1.4.7.zip jadx-1.4.7
