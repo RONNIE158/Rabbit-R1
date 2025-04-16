@@ -44,16 +44,16 @@ jobs:
         sudo chmod +x /usr/local/bin/jadx
 
     - name: Run build.sh with selected build type
-        run: |
+      run: |
           echo "Running build with type: ${{ github.event.inputs.build_type }}"
           bash ./build.sh "${{ github.event.inputs.build_type }}"
 
-      - name: Upload APKs
-        uses: softprops/action-gh-release@v1
-        with:
+    - name: Upload APKs
+      uses: softprops/action-gh-release@v1
+      with:
           files: |
             original/apk/*.apk
             android*/apk/*.apk
             switch*/apk/*.apk
-        env:
+      env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
