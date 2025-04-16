@@ -29,9 +29,27 @@ jobs:
           # Cek struktur folder setelah ekstraksi untuk memastikan lokasi bin/jadx
           ls -R jadx-1.4.7
 
-          # Pindahkan jadx CLI ke /usr/local/bin
+          # Pindahkan file 'jadx', 'jadx-gui', 'jadx.run', dan 'jadx-gui.run' ke /usr/local/bin/ dan pastikan sudah executable
           sudo mv jadx-1.4.7/bin/jadx /usr/local/bin/
+          sudo mv jadx-1.4.7/bin/jadx-gui /usr/local/bin/
+          sudo mv jadx-1.4.7/bin/jadx.run /usr/local/bin/
+          sudo mv jadx-1.4.7/bin/jadx-gui.run /usr/local/bin/
+
+          # Ubah hak akses agar file-file tersebut bisa dieksekusi
           sudo chmod +x /usr/local/bin/jadx
+          sudo chmod +x /usr/local/bin/jadx-gui
+          sudo chmod +x /usr/local/bin/jadx.run
+          sudo chmod +x /usr/local/bin/jadx-gui.run
+
+          # Pindahkan seluruh file .jar dari lib/ ke /usr/local/lib/jadx/
+          sudo mkdir -p /usr/local/lib/jadx
+          sudo mv jadx-1.4.7/lib/* /usr/local/lib/jadx/
+
+          # Setel CLASSPATH untuk seluruh .jar di /usr/local/lib/jadx/
+          export CLASSPATH=/usr/local/lib/jadx/*
+
+          # Menjalankan Jadx untuk memastikan semuanya berjalan
+          jadx -v
 
       - name: Make build script executable
         run: chmod +x build.sh
