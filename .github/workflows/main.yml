@@ -33,11 +33,9 @@ jobs:
         sudo mkdir -p /usr/local/bin
         sudo mkdir -p /usr/local/lib
         
-        # Memindahkan file binary ke folder bin
+        # Memindahkan file binary yang ada ke folder bin
         sudo mv jadx/bin/jadx /usr/local/bin/
         sudo mv jadx/bin/jadx-gui /usr/local/bin/
-        sudo mv jadx/bin/jadx.run /usr/local/bin/
-        sudo mv jadx/bin/jadx-gui.run /usr/local/bin/
         
         # Memindahkan semua file .jar ke dalam /usr/local/lib/
         sudo mv jadx/lib/* /usr/local/lib/
