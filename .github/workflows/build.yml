@@ -61,7 +61,7 @@ jobs:
       with:
           files: |
             original/apk/*.apk
-            android*/apk/*.apk
-            switch*/apk/*.apk
+            android/apk/*.apk
+            switch/apk/*.apk
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
