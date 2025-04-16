@@ -46,8 +46,8 @@ jobs:
     - name: Run build script with selected build type
         run: |
           BUILD_TYPE=${{ github.event.inputs.build_type }}
-          sed -i "s/^read -p.*/echo \"${BUILD_TYPE}\"/" ./build.sh
-          bash ./build.sh
+          echo "Building with selected type: $BUILD_TYPE"
+          bash ./build.sh $BUILD_TYPE
 
     - name: Upload APK to Release
       uses: softprops/action-gh-release@v1
