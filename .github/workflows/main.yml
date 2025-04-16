@@ -1,4 +1,4 @@
-name: APK Builder & Release (ZIP)
+name: APK Builder & Release
 
 on:
   workflow_dispatch:
@@ -20,7 +20,13 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y apktool jadx zip
+          sudo apt install -y apktool zip wget unzip
+
+          # Install jadx manually
+          wget https://github.com/skylot/jadx/releases/download/v1.4.7/jadx-1.4.7.zip
+          unzip jadx-1.4.7.zip
+          sudo mv jadx-1.4.7/bin/jadx /usr/local/bin/
+          sudo chmod +x /usr/local/bin/jadx
 
       - name: Make build script executable
         run: chmod +x build.sh
@@ -31,14 +37,14 @@ jobs:
             echo $i | ./build.sh
           done
 
-      - name: Zip all built APKs
+      - name: Zip all APKs
         run: |
-          mkdir release
+          mkdir -p release
           zip -j release/Rabbit_R1_Builds.zip original/apk/*.apk || true
           zip -j release/Rabbit_R1_Builds.zip android*/apk/*.apk || true
           zip -j release/Rabbit_R1_Builds.zip switch*/apk/*.apk || true
 
-      - name: Create release and upload ZIP
+      - name: Create GitHub Release and upload ZIP
         uses: softprops/action-gh-release@v1
         with:
           name: "Rabbit APK Build - ${{ github.run_number }}"
