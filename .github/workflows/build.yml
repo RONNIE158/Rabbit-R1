@@ -13,51 +13,55 @@ on:
           - switch port
 
 jobs:
-  build:
+  build-apk:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository
-      - name: Checkout repository
-        uses: actions/checkout@v2
+    - name: Checkout Repo
+      uses: actions/checkout@v3
 
-      # Set up JDK for signing the APK
-      - name: Set up JDK 11
-        uses: actions/setup-java@v2
-        with:
-          java-version: '11'
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y wget unzip openjdk-17-jdk
 
-      # Install Apktool
-      - name: Install Apktool
-        run: |
-          wget https://github.com/iBotPeaches/Apktool/releases/download/v2.9.3/apktool_2.9.3.jar -O apktool.jar
+    - name: Install apktool
+      run: |
+        wget https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_2.9.3.jar -O apktool.jar
+        sudo mv apktool.jar /usr/local/bin/apktool.jar
+        echo -e '#!/bin/bash\njava -jar /usr/local/bin/apktool.jar "$@"' | sudo tee /usr/local/bin/apktool > /dev/null
+        sudo chmod +x /usr/local/bin/apktool
+
+    - name: Install uber-apk-signer
+      run: |
+        wget https://github.com/patrickfav/uber-apk-signer/releases/download/v1.2.1/uber-apk-signer-1.2.1.jar -O uber-apk-signer.jar
 
       # Install Jadx
-      - name: Install Jadx
-        run: |
+    - name: Install Jadx
+      run: |
           wget https://github.com/skylot/jadx/releases/download/v1.4.7/jadx-1.4.7.zip
           unzip jadx-1.4.7.zip -d jadx
           chmod +x jadx/bin/jadx
 
       # Install Uber APK signer
-      - name: Install Uber APK signer
-        run: |
+    - name: Install Uber APK signer
+      run: |
           wget https://github.com/patrickfav/uber-apk-signer/releases/download/v1.2.0/uber-apk-signer-1.2.0.jar
 
       # Run the build.sh script with the selected build type
-      - name: Run build script with selected build type
-        run: |
+    - name: Run build script with selected build type
+      run: |
           BUILD_TYPE="${{ github.event.inputs.build_type }}"
           echo "Running build with type: $BUILD_TYPE"
           bash ./build.sh "$BUILD_TYPE"
 
       # Upload APKs to GitHub release
-      - name: Upload APK to Release
-        uses: softprops/action-gh-release@v1
-        with:
+    - name: Upload APK to Release
+      uses: softprops/action-gh-release@v1
+      with:
           files: |
             original/apk/*.apk
             android*/apk/*.apk
             switch*/apk/*.apk
-        env:
+      env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
