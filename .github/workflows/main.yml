@@ -22,9 +22,9 @@ jobs:
           sudo apt update
           sudo apt install -y apktool zip wget unzip
 
-          # Download dan ekstrak JADX
+          # Download dan ekstrak JADX tanpa interaksi
           wget https://github.com/skylot/jadx/releases/download/v1.4.7/jadx-1.4.7.zip
-          unzip -q jadx-1.4.7.zip
+          unzip -q -o jadx-1.4.7.zip
 
           # Pindahkan jadx CLI ke /usr/local/bin
           sudo mv jadx-1.4.7/bin/jadx /usr/local/bin/
