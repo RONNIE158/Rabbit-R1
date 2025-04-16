@@ -57,8 +57,8 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
           files: |
-            original/apk/*.apk
-            android*/apk/*.apk
-            switch*/apk/*.apk
+            ${{ github.event.inputs.build_type == 'original' && 'original/apk/*.apk' || '' }}
+            ${{ github.event.inputs.build_type == 'android (non root)' && 'android*/apk/*.apk' || '' }}
+            ${{ github.event.inputs.build_type == 'switch port' && 'switch*/apk/*.apk' || '' }}
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
