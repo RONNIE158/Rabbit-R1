@@ -23,22 +23,8 @@ jobs:
     - name: Install Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y wget unzip openjdk-17-jdk 
-      
-    - name: Install apktool
-      run: |
-        wget https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool -O apktool
-        sudo chmod +x apktool
-        wget https://github.com/iBotPeaches/Apktool/releases/download/v2.11.1/apktool_2.11.1.jar -O apktool.jar
-        sudo chmod +x apktool.jar
-        sudo mkdir -p "$HOME/.local/share/apktool/framework"
-        sudo chmod +x "$HOME/.local/share/apktool/framework"
-        sudo mkdir -p "$HOME/.local/bin"
-        sudo mv apktool "$HOME/.local/bin/"
-        sudo mv apktool.jar "$HOME/.local/bin/"
-        echo "$HOME/.local/bin" >> $GITHUB_PATH
-
-      
+        sudo apt-get install -y wget unzip openjdk-17-jdk aapk apktool
+ 
       # Install Jadx
     - name: Install Jadx
       run: |
