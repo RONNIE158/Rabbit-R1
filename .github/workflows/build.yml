@@ -23,7 +23,7 @@ jobs:
     - name: Install Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y wget unzip openjdk-17-jdk apktool
+        sudo apt-get install -y wget unzip openjdk-17-jdk aapt apktool 
       
       # Install Jadx
     - name: Install Jadx
@@ -45,12 +45,6 @@ jobs:
         curl -L https://github.com/patrickfav/uber-apk-signer/releases/download/v1.2.0/uber-apk-signer-1.2.0.jar -o ./uber-apk-signer.jar
         sudo chmod +x ./uber-apk-signer.jar
         
-    - name: Install AAPT
-      run: |
-        curl -LO https://dl.google.com/android/repository/build-tools_r30.0.3-linux.zip
-        unzip -q build-tools_r30.0.3-linux.zip
-        echo "$GITHUB_WORKSPACE/android-11/build-tools/30.0.3" >> $GITHUB_PATH
-     
     - name: Clean up .DS_Store files
       run: |
         find . -name '.DS_Store' -type f -delete 
