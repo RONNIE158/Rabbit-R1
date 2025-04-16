@@ -45,7 +45,7 @@ jobs:
 
     - name: Run build script with selected build type
         run: |
-          BUILD_TYPE=${{ github.event.inputs.build_type }}
+          BUILD_TYPE="${{ github.event.inputs.build_type }}"
           echo "Building with selected type: $BUILD_TYPE"
           bash ./build.sh "$BUILD_TYPE"
 
