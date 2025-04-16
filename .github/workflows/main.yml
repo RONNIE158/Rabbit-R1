@@ -1,62 +1,52 @@
 name: Build and Decompile APK
 
 on:
-  workflow_dispatch:
-    inputs:
-      build_type:
-        description: 'Build type (original | android | switch)'
-        required: true
-        default: 'original'
+  push:
+    branches:
+      - main
 
 jobs:
   build-apk:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
+    - name: Checkout Repo
       uses: actions/checkout@v3
 
-    - name: Setup Java
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y wget unzip openjdk-17-jdk
 
     - name: Install apktool
       run: |
-        sudo apt-get update
-        sudo apt-get install -y apktool
+        wget https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_2.9.3.jar -O apktool.jar
+        sudo mv apktool.jar /usr/local/bin/apktool.jar
+        echo -e '#!/bin/bash\njava -jar /usr/local/bin/apktool.jar "$@"' | sudo tee /usr/local/bin/apktool > /dev/null
+        sudo chmod +x /usr/local/bin/apktool
+
+    - name: Install uber-apk-signer
+      run: |
+        wget https://github.com/patrickfav/uber-apk-signer/releases/download/v1.2.1/uber-apk-signer-1.2.1.jar -O uber-apk-signer.jar
 
     - name: Install jadx
       run: |
         wget https://github.com/skylot/jadx/releases/download/v1.4.7/jadx-1.4.7.zip
-        unzip jadx-1.4.7.zip
+        unzip -o jadx-1.4.7.zip
+        sudo mkdir -p /usr/local/bin /usr/local/lib
         sudo mv jadx/bin/jadx /usr/local/bin/
+        sudo mv jadx/bin/jadx-gui /usr/local/bin/
         sudo mv jadx/lib/* /usr/local/lib/
 
-    - name: Download uber-apk-signer
-      run: |
-        wget https://github.com/patrickfav/uber-apk-signer/releases/download/v1.2.1/uber-apk-signer-1.2.1.jar -O uber-apk-signer.jar
-
     - name: Run Build Script
-      run: |
-        chmod +x build.sh
-        ./build.sh ${{ github.event.inputs.build_type }}
-
-    - name: Create GitHub Release
-      uses: softprops/action-gh-release@v1
-      with:
-        tag_name: build-${{ github.run_number }}
-        name: Build ${{ github.run_number }} - ${{ github.event.inputs.build_type }}
-        body: |
-          APK hasil build type **${{ github.event.inputs.build_type }}**
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: bash ./build.sh
 
     - name: Upload APK to Release
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          ${{ github.event.inputs.build_type }}/apk/*.apk
+          original/apk/*.apk
+          android*/apk/*.apk
+          switch*/apk/*.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
