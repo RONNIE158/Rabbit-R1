@@ -32,11 +32,15 @@ jobs:
       run: |
         sudo mkdir -p /usr/local/bin
         sudo mkdir -p /usr/local/lib
-        sudo mv jadx-1.4.7/bin/jadx /usr/local/bin/
-        sudo mv jadx-1.4.7/bin/jadx-gui /usr/local/bin/
-        sudo mv jadx-1.4.7/bin/jadx.run /usr/local/bin/
-        sudo mv jadx-1.4.7/bin/jadx-gui.run /usr/local/bin/
-        sudo mv jadx-1.4.7/lib/* /usr/local/lib/
+        
+        # Memindahkan file binary ke folder bin
+        sudo mv jadx/bin/jadx /usr/local/bin/
+        sudo mv jadx/bin/jadx-gui /usr/local/bin/
+        sudo mv jadx/bin/jadx.run /usr/local/bin/
+        sudo mv jadx/bin/jadx-gui.run /usr/local/bin/
+        
+        # Memindahkan semua file .jar ke dalam /usr/local/lib/
+        sudo mv jadx/lib/* /usr/local/lib/
 
     # Display Java version
     - name: Display Java version
@@ -50,7 +54,7 @@ jobs:
 
     # (Optional) Upload decompiled files to artifacts
     - name: Upload Decompiled APK Files
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
         name: decompiled-apk
         path: decompiled_apk/
