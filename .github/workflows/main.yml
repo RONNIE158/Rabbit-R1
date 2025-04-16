@@ -1,9 +1,16 @@
 name: Build and Decompile APK
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Choose the build type'
+        required: true
+        default: 'original'
+        options:
+          - 'original'
+          - 'android (non root)'
+          - 'switch port'
 
 jobs:
   build-apk:
@@ -36,14 +43,11 @@ jobs:
         sudo install bin/jadx /usr/local/bin/jadx
         sudo chmod +x /usr/local/bin/jadx
 
-    - name: Run build.sh for Original build
-        run: bash ./build.sh 1
-
-      - name: Run build.sh for Android (No-Root) build
-        run: bash ./build.sh 2
-
-      - name: Run build.sh for Switch Port build
-        run: bash ./build.sh 3
+    - name: Run build script with selected build type
+        run: |
+          BUILD_TYPE=${{ github.event.inputs.build_type }}
+          sed -i "s/^read -p.*/echo \"${BUILD_TYPE}\"/" ./build.sh
+          bash ./build.sh
 
     - name: Upload APK to Release
       uses: softprops/action-gh-release@v1
