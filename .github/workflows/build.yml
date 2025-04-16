@@ -35,6 +35,12 @@ jobs:
         sudo mv jadx-temp/bin/* /opt/jadx/bin/
         sudo mv jadx-temp/lib /opt/jadx/
         sudo find /opt/jadx/bin -type f -exec chmod +x {} \;
+     
+    - name: Clean apktool framework directory
+      run: |
+        sudo rm -rf "$HOME/.local/share/apktool/framework"
+        sudo mkdir -p "$HOME/.local/share/apktool/framework"
+        sudo chmod -R 777 "$HOME/.local/share/apktool/framework"   
     
     - name: Add Jadx to PATH
       run: echo "/opt/jadx/bin" >> $GITHUB_PATH
