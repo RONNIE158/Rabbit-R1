@@ -47,7 +47,7 @@ jobs:
         run: |
           BUILD_TYPE=${{ github.event.inputs.build_type }}
           echo "Building with selected type: $BUILD_TYPE"
-          bash ./build.sh $BUILD_TYPE
+          bash ./build.sh "$BUILD_TYPE"
 
     - name: Upload APK to Release
       uses: softprops/action-gh-release@v1
