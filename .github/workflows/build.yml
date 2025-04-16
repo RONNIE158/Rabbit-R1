@@ -23,11 +23,11 @@ jobs:
     - name: Install Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y wget unzip openjdk-17-jdk
+        sudo apt-get install -y wget unzip openjdk-17-jdk apktool
       # Install apktool
     - name: Install apktool
       run: |
-        wget https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_2.9.3.jar -O /home/runner/work/Rabbit-R1/apktool.jar
+        sudo wget https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_2.9.3.jar -O /home/runner/work/Rabbit-R1/apktool.jar
         sudo chmod +r /home/runner/work/Rabbit-R1/apktool.jar
         sudo wget https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool -O /home/runner/work/Rabbit-R1/apktool
         sudo chmod +x /home/runner/work/Rabbit-R1/apktool
