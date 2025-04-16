@@ -1,0 +1,48 @@
+name: APK Builder & Release (ZIP)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y apktool jadx zip
+
+      - name: Make build script executable
+        run: chmod +x build.sh
+
+      - name: Run build for all types
+        run: |
+          for i in 1 2 3; do
+            echo $i | ./build.sh
+          done
+
+      - name: Zip all built APKs
+        run: |
+          mkdir release
+          zip -j release/Rabbit_R1_Builds.zip original/apk/*.apk || true
+          zip -j release/Rabbit_R1_Builds.zip android*/apk/*.apk || true
+          zip -j release/Rabbit_R1_Builds.zip switch*/apk/*.apk || true
+
+      - name: Create release and upload ZIP
+        uses: softprops/action-gh-release@v1
+        with:
+          name: "Rabbit APK Build - ${{ github.run_number }}"
+          tag_name: "build-${{ github.run_number }}"
+          files: release/Rabbit_R1_Builds.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
