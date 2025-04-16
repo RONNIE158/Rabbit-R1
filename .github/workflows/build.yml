@@ -36,33 +36,28 @@ jobs:
         sudo mv jadx-temp/lib /opt/jadx/
         sudo find /opt/jadx/bin -type f -exec chmod +x {} \;
     
-    # Install Uber APK signer
-    - name: Install uber-apk-signer
-      run: |
-        wget https://github.com/patrickfav/uber-apk-signer/releases/download/v1.2.1/uber-apk-signer-1.2.1.jar -O /home/runner/work/Rabbit-R1/uber-apk-signer.jar
-        sudo mv /home/runner/work/Rabbit-R1/uber-apk-signer.jar /opt/jadx/uber-apk-signer.jar
-        sudo chmod +x /opt/jadx/uber-apk-signer.jar
-        wget https://github.com/patrickfav/uber-apk-signer/releases/download/v1.2.1/uber-apk-signer-1.2.1.jar -O /home/runner/work/Rabbit-R1/uber-apk-signer
-        sudo mv /home/runner/work/Rabbit-R1/uber-apk-signer /opt/jadx/uber-apk-signer
-        sudo chmod +x /opt/jadx/uber-apk-signer
-    
     - name: Add Jadx to PATH
       run: echo "/opt/jadx/bin" >> $GITHUB_PATH
-
+      
+      # Install Uber APK signer
+    - name: Ensure uber-apk-signer.jar permissions
+      run: |
+        chmod +x ./uber-apk-signer.jar
+          
       # Run the build.sh script with the selected build type
     - name: Run build script with selected build type
       run: |
-          BUILD_TYPE="${{ github.event.inputs.build_type }}"
-          echo "Running build with type: $BUILD_TYPE"
-          bash ./build.sh "$BUILD_TYPE"
+        BUILD_TYPE="${{ github.event.inputs.build_type }}"
+        echo "Running build with type: $BUILD_TYPE"
+        bash ./build.sh "$BUILD_TYPE"
 
       # Upload APKs to GitHub release
     - name: Upload APK to Release
       uses: softprops/action-gh-release@v1
       with:
-          files: |
-            original/apk/*.apk
-            android/apk/*.apk
-            switch/apk/*.apk
+       files: |
+          original/apk/*.apk
+          android/apk/*.apk
+          switch/apk/*.apk
       env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
