@@ -29,17 +29,17 @@ case $build_type in
 esac
 
 # Build APK using apktool
-apktool b "$smali_folder" -o "$build_type/apk/RabbitR1 $build_type.apk"
+apktool b "$smali_folder" -o "$build_type/apk/RabbitR1$build_type.apk"
 
 # Sign the APK
-java -jar "./uber-apk-signer.jar" --apks "$build_type/apk/RabbitR1 $build_type.apk"
+java -jar "./uber-apk-signer.jar" --apks "$build_type/apk/RabbitR1$build_type.apk"
 
 # Rename the signed APK
-mv "$build_type/apk/RabbitR1 $build_type-aligned-debugSigned.apk" "$build_type/apk/RabbitR1 $build_type.apk"
+mv "$build_type/apk/RabbitR1$build_type-aligned-debugSigned.apk" "$build_type/apk/RabbitR1$build_type.apk"
 
 # Decompile the APK using jadx
-jadx -d "$build_type/java" "$build_type/apk/RabbitR1 $build_type.apk"
+jadx -d "$build_type/java" "$build_type/apk/RabbitR1$build_type.apk"
 
-rm "$build_type/apk/RabbitR1 $build_type-aligned-debugSigned.apk.idsig"
+rm "$build_type/apk/RabbitR1$build_type-aligned-debugSigned.apk.idsig"
 
 echo "Build and decompile process completed for $build_type build."
