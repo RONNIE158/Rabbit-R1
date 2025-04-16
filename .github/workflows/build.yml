@@ -23,7 +23,13 @@ jobs:
     - name: Install Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y wget unzip openjdk-17-jdk aapt apktool 
+        sudo apt-get install -y wget unzip openjdk-17-jdk 
+      
+    - name: Download APKTool
+      run: |
+        wget https://github.com/berkus/android-apktool/releases/download/v2.7.0/apktool_2.7.0.jar -O ~/apktool.jar
+        echo "alias apktool='java -jar ~/apktool.jar'" >> ~/.bashrc
+        source ~/.bashrc
       
       # Install Jadx
     - name: Install Jadx
