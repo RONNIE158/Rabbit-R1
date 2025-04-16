@@ -9,8 +9,8 @@ on:
         type: choice
         options:
           - original
-          - android (non root)
-          - switch port
+          - android
+          - switch
 
 jobs:
   build-apk:
