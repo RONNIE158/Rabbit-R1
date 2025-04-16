@@ -54,7 +54,7 @@ jobs:
 
     # (Optional) Upload decompiled files to artifacts
     - name: Upload Decompiled APK Files
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: decompiled-apk
         path: decompiled_apk/
