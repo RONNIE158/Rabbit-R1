@@ -32,7 +32,7 @@ jobs:
     - name: Install jadx
       run: |
         wget https://github.com/skylot/jadx/releases/download/v1.4.7/jadx-1.4.7.zip
-        unzip -q jadx-1.4.7.zip
+        unzip -qo jadx-1.4.7.zip
         sudo install bin/jadx /usr/local/bin/jadx
         sudo chmod +x /usr/local/bin/jadx
 
