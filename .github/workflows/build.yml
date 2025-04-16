@@ -23,7 +23,7 @@ jobs:
     - name: Install Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y wget unzip openjdk-17-jdk apktool
+        sudo apt-get install -y wget unzip java openjdk-17-jdk apktool
 
     - name: Install Android SDK Command Line Tools and Build Tools
       run: |
