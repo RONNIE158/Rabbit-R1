@@ -22,10 +22,10 @@ jobs:
           sudo apt update
           sudo apt install -y apktool zip wget unzip
 
-          # Install JADX manually (fix unzip prompt)
+          # Install JADX tanpa prompt overwrite
           wget https://github.com/skylot/jadx/releases/download/v1.4.7/jadx-1.4.7.zip
           unzip -o -q jadx-1.4.7.zip
-          sudo mv jadx-1.4.7/bin/jadx /usr/local/bin/
+          sudo mv jadx/bin/jadx /usr/local/bin/
           sudo chmod +x /usr/local/bin/jadx
 
       - name: Make build script executable
@@ -40,9 +40,7 @@ jobs:
       - name: Zip all APKs
         run: |
           mkdir -p release
-          zip -j release/Rabbit_R1_Builds.zip original/apk/*.apk || true
-          zip -j release/Rabbit_R1_Builds.zip android*/apk/*.apk || true
-          zip -j release/Rabbit_R1_Builds.zip switch*/apk/*.apk || true
+          find . -type f -name "*.apk" -exec zip -j release/Rabbit_R1_Builds.zip {} +
 
       - name: Create GitHub Release and upload ZIP
         uses: softprops/action-gh-release@v1
