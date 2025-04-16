@@ -50,6 +50,10 @@ jobs:
         curl -LO https://dl.google.com/android/repository/build-tools_r30.0.3-linux.zip
         unzip -q build-tools_r30.0.3-linux.zip
         echo "$GITHUB_WORKSPACE/android-11/build-tools/30.0.3" >> $GITHUB_PATH
+     
+    - name: Clean up .DS_Store files
+      run: |
+        find . -name '.DS_Store' -type f -delete 
         
       # Run the build.sh script with the selected build type
     - name: Run build script with selected build type
