@@ -33,9 +33,8 @@ jobs:
          unzip jadx.zip -d jadx-temp
          sudo mkdir -p /opt/jadx/bin
          sudo mv jadx-temp/bin/jadx /opt/jadx/bin/
-         sudo mv jadx-temp/bin/jadx-gui /opt/jadx/bin/
          sudo mv jadx-temp/lib /opt/jadx/
-         sudo chmod +x /opt/jadx/bin/jadx /opt/jadx/bin/jadx-gui
+         sudo chmod +x /opt/jadx/bin/jadx
     
     # Install Uber APK signer
     - name: Install uber-apk-signer
