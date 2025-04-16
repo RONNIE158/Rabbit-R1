@@ -1,63 +1,62 @@
-name: Build APK and Decompile with JADX
+name: Build and Decompile APK
 
 on:
-  push:
-    branches:
-      - main  # Atau branch yang kamu inginkan
   workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Build type (original | android | switch)'
+        required: true
+        default: 'original'
 
 jobs:
-  build_and_decompile:
+  build-apk:
     runs-on: ubuntu-latest
 
     steps:
-    # Check out the repository
-    - name: Checkout code
-      uses: actions/checkout@v2
+    - name: Checkout repo
+      uses: actions/checkout@v3
 
-    # Install dependencies
-    - name: Install required dependencies
+    - name: Setup Java
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Install apktool
       run: |
-        sudo apt update
-        sudo apt install -y openjdk-11-jdk wget unzip
+        sudo apt-get update
+        sudo apt-get install -y apktool
 
-    # Download and extract JADX
-    - name: Download JADX
+    - name: Install jadx
       run: |
         wget https://github.com/skylot/jadx/releases/download/v1.4.7/jadx-1.4.7.zip
-        unzip jadx-1.4.7.zip -d jadx
-
-    # Set up the folder structure for JADX
-    - name: Set up JADX folder structure
-      run: |
-        sudo mkdir -p /usr/local/bin
-        sudo mkdir -p /usr/local/lib
-        
-        # Memindahkan file binary yang ada ke folder bin
+        unzip jadx-1.4.7.zip
         sudo mv jadx/bin/jadx /usr/local/bin/
-        sudo mv jadx/bin/jadx-gui /usr/local/bin/
-        
-        # Memindahkan semua file .jar ke dalam /usr/local/lib/
         sudo mv jadx/lib/* /usr/local/lib/
 
-    # Display Java version
-    - name: Display Java version
-      run: java -version
-
-    # Decompile APK with JADX
-    - name: Decompile APK using JADX
+    - name: Download uber-apk-signer
       run: |
-        # Assumes APK is available at a specific location, modify as needed
-        /usr/local/bin/jadx -d decompiled_apk /path/to/your.apk
+        wget https://github.com/patrickfav/uber-apk-signer/releases/download/v1.2.1/uber-apk-signer-1.2.1.jar -O uber-apk-signer.jar
 
-    # (Optional) Upload decompiled files to artifacts
-    - name: Upload Decompiled APK Files
-      uses: actions/upload-artifact@v4
+    - name: Run Build Script
+      run: |
+        chmod +x build.sh
+        ./build.sh ${{ github.event.inputs.build_type }}
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
       with:
-        name: decompiled-apk
-        path: decompiled_apk/
+        tag_name: build-${{ github.run_number }}
+        name: Build ${{ github.run_number }} - ${{ github.event.inputs.build_type }}
+        body: |
+          APK hasil build type **${{ github.event.inputs.build_type }}**
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    # Cleanup
-    - name: Clean up
-      run: |
-        rm -rf jadx-1.4.7.zip jadx-1.4.7
+    - name: Upload APK to Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          ${{ github.event.inputs.build_type }}/apk/*.apk
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
