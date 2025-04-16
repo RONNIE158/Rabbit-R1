@@ -22,10 +22,12 @@ jobs:
           sudo apt update
           sudo apt install -y apktool zip wget unzip
 
-          # Install JADX tanpa prompt overwrite
+          # Download dan ekstrak JADX
           wget https://github.com/skylot/jadx/releases/download/v1.4.7/jadx-1.4.7.zip
-          unzip -o -q jadx-1.4.7.zip
-          sudo mv jadx/bin/jadx /usr/local/bin/
+          unzip -q jadx-1.4.7.zip
+
+          # Pindahkan jadx CLI ke /usr/local/bin
+          sudo mv jadx-1.4.7/bin/jadx /usr/local/bin/
           sudo chmod +x /usr/local/bin/jadx
 
       - name: Make build script executable
