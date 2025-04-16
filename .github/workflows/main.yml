@@ -30,13 +30,11 @@ jobs:
         wget https://github.com/patrickfav/uber-apk-signer/releases/download/v1.2.1/uber-apk-signer-1.2.1.jar -O uber-apk-signer.jar
 
     - name: Install jadx
-      run: |
-        wget https://github.com/skylot/jadx/releases/download/v1.4.7/jadx-1.4.7.zip
-        unzip -o jadx-1.4.7.zip
-        sudo mkdir -p /usr/local/bin /usr/local/lib
-        sudo mv jadx/bin/jadx /usr/local/bin/
-        sudo mv jadx/bin/jadx-gui /usr/local/bin/
-        sudo mv jadx/lib/* /usr/local/lib/
+  run: |
+    wget https://github.com/skylot/jadx/releases/download/v1.4.7/jadx-1.4.7.zip
+    unzip -q jadx-1.4.7.zip -d jadx
+    sudo install jadx/bin/jadx /usr/local/bin/jadx
+    sudo chmod +x /usr/local/bin/jadx
 
     - name: Run Build Script
       run: bash ./build.sh
