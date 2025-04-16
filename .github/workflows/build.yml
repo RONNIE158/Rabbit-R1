@@ -27,9 +27,9 @@ jobs:
       
     - name: Install apktool
       run: |
-        wget https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool -O apktool
+        wget wget https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool -O apktool
         sudo chmod +x apktool
-        wget https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_$apktool_version.jar -O apktool.jar
+        wget wget https://github.com/iBotPeaches/Apktool/releases/download/v $APKTOOL_VERSION /apktool_ $APKTOOL_VERSION .jar -O apktool.jar
         sudo chmod +x apktool.jar
         sudo mkdir -p "$HOME/.local/bin"
         sudo mv apktool "$HOME/.local/bin/"
