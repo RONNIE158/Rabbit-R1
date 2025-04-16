@@ -17,10 +17,10 @@ case $build_type in
     smali_folder="original/smali"
     ;;
   "android (non root)")
-    smali_folder="android (non root)/smali"
+    smali_folder="android/smali"
     ;;
   "switch port")
-    smali_folder="switch port/smali"
+    smali_folder="switch/smali"
     ;;
   *)
     echo "Invalid build type. Exiting."
