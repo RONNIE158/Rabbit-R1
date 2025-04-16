@@ -38,8 +38,8 @@ java -jar "./uber-apk-signer.jar" --apks "$build_type/apk/RabbitR1$build_type.ap
 mv "$build_type/apk/RabbitR1$build_type-aligned-debugSigned.apk" "$build_type/apk/RabbitR1$build_type.apk"
 
 # Decompile the APK using jadx
-jadx -d "$build_type/java" "$build_type/apk/RabbitR1$build_type.apk"
+jadx -d "$build_type/java" "$build_type/apk/RabbitR1$build_type.apk" || echo "jadx finished with warnings/errors"
 
-rm "$build_type/apk/RabbitR1$build_type-aligned-debugSigned.apk.idsig"
+rm -f "$build_type/apk/RabbitR1$build_type-aligned-debugSigned.apk.idsig"
 
 echo "Build and decompile process completed for $build_type build."
