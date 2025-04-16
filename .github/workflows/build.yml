@@ -42,7 +42,8 @@ jobs:
       # Install Uber APK signer
     - name: Ensure uber-apk-signer.jar permissions
       run: |
-        chmod +x ./uber-apk-signer.jar
+        curl -L https://github.com/patrickfav/uber-apk-signer/releases/download/v1.2.0/uber-apk-signer-1.2.0.jar -o ./uber-apk-signer.jar
+        sudo chmod +x ./uber-apk-signer.jar
           
       # Run the build.sh script with the selected build type
     - name: Run build script with selected build type
