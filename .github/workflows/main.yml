@@ -22,9 +22,9 @@ jobs:
           sudo apt update
           sudo apt install -y apktool zip wget unzip
 
-          # Install jadx manually
+          # Install JADX manually (fix unzip prompt)
           wget https://github.com/skylot/jadx/releases/download/v1.4.7/jadx-1.4.7.zip
-          unzip jadx-1.4.7.zip
+          unzip -o -q jadx-1.4.7.zip
           sudo mv jadx-1.4.7/bin/jadx /usr/local/bin/
           sudo chmod +x /usr/local/bin/jadx
 
