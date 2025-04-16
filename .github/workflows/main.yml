@@ -36,8 +36,14 @@ jobs:
         sudo install bin/jadx /usr/local/bin/jadx
         sudo chmod +x /usr/local/bin/jadx
 
-    - name: Run Build Script
-      run: bash ./build.sh
+    - name: Run build.sh for Original build
+        run: bash ./build.sh 1
+
+      - name: Run build.sh for Android (No-Root) build
+        run: bash ./build.sh 2
+
+      - name: Run build.sh for Switch Port build
+        run: bash ./build.sh 3
 
     - name: Upload APK to Release
       uses: softprops/action-gh-release@v1
