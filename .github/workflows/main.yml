@@ -26,6 +26,9 @@ jobs:
           wget https://github.com/skylot/jadx/releases/download/v1.4.7/jadx-1.4.7.zip
           unzip -q -o jadx-1.4.7.zip
 
+          # Cek struktur folder setelah ekstraksi untuk memastikan lokasi bin/jadx
+          ls -R jadx-1.4.7
+
           # Pindahkan jadx CLI ke /usr/local/bin
           sudo mv jadx-1.4.7/bin/jadx /usr/local/bin/
           sudo chmod +x /usr/local/bin/jadx
