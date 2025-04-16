@@ -32,6 +32,7 @@ jobs:
         wget https://github.com/iBotPeaches/Apktool/releases/download/v2.11.1/apktool_2.11.1.jar -O apktool.jar
         sudo chmod +x apktool.jar
         sudo mkdir -p "$HOME/.local/share/apktool/framework"
+        sudo chmod +x "$HOME/.local/share/apktool/framework"
         sudo mkdir -p "$HOME/.local/bin"
         sudo mv apktool "$HOME/.local/bin/"
         sudo mv apktool.jar "$HOME/.local/bin/"
